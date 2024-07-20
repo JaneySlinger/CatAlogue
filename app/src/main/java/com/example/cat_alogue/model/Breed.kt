@@ -3,53 +3,53 @@ package com.example.cat_alogue.model
 import com.squareup.moshi.Json
 
 data class Breed(
-    val adaptability: Int,
+    val adaptability: Int? = null,
     @Json(name = "affection_level")
-    val affectionLevel: Int,
+    val affectionLevel: Int? = null,
     @Json(name = "cat_friendly")
-    val catFriendly: Int,
+    val catFriendly: Int? = null,
     @Json(name = "cfa_url")
     val cfaUrl: String? = null,
     @Json(name = "child_friendly")
-    val childFriendly: Int,
-    val description: String,
+    val childFriendly: Int? = null,
+    val description: String? = null,
     @Json(name = "dog_friendly")
-    val dogFriendly: Int,
+    val dogFriendly: Int? = null,
     @Json(name = "energy_level")
-    val energyLevel: Int,
-    val experimental: Int,
-    val grooming: Int,
-    val hairless: Int,
+    val energyLevel: Int? = null,
+    val experimental: Int? = null,
+    val grooming: Int? = null,
+    val hairless: Int? = null,
     @Json(name = "health_issues")
-    val healthIssues: Int,
-    val hypoallergenic: Int,
-    val id: String,
-    val indoor: Int,
-    val intelligence: Int,
-    val lap: Int,
+    val healthIssues: Int? = null,
+    val hypoallergenic: Int? = null,
+    val id: String? = null,
+    val indoor: Int? = null,
+    val intelligence: Int? = null,
+    val lap: Int? = null,
     @Json(name = "life_span")
-    val lifeSpan: String,
-    val name: String,
-    val natural: Int,
-    val origin: String,
-    val rare: Int,
+    val lifeSpan: String? = null,
+    val name: String? = null,
+    val natural: Int? = null,
+    val origin: String? = null,
+    val rare: Int? = null,
     @Json(name = "reference_image_id")
-    val referenceImageId: String,
-    val rex: Int,
+    val referenceImageId: String? = null,
+    val rex: Int? = null,
     @Json(name = "shedding_level")
-    val sheddingLevel: Int,
+    val sheddingLevel: Int? = null,
     @Json(name = "social_needs")
-    val socialNeeds: Int,
+    val socialNeeds: Int? = null,
     @Json(name = "stranger_friendly")
-    val strangerFriendly: Int,
-    val temperament: String,
+    val strangerFriendly: Int? = null,
+    val temperament: String? = null,
     @Json(name = "vetstreet_url")
     val vetStreetUrl: String? = null,
-    val vocalisation: Int,
-    val weight: Weight,
+    val vocalisation: Int? = null,
+    val weight: Weight? = null,
 )
 
 data class Weight(
-    val imperial: String,
-    val metric: String
+    val imperial: String? = null,
+    val metric: String? = null,
 )

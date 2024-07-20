@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -75,4 +77,13 @@ dependencies {
 
     // Coil for image loading
     implementation(libs.coil.compose)
+
+    //hilt
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }
