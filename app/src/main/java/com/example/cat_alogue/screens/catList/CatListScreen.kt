@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -54,7 +55,7 @@ fun CatList(
 ) {
     LazyColumn {
         items(breeds) { breed ->
-            Row {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 AsyncImage(
                     contentScale = ContentScale.Crop,
                     model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
