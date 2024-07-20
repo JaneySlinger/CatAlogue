@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.example.cat_alogue.screens.catList.CatList
+import com.example.cat_alogue.screens.catList.CatListScreen
 import com.example.cat_alogue.ui.theme.CatalogueTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             CatalogueTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CatList()
+                    CatListScreen()
                 }
             }
         }
