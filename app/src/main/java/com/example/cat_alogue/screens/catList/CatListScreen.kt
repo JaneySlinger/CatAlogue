@@ -1,5 +1,6 @@
 package com.example.cat_alogue.screens.catList
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +32,8 @@ import com.example.cat_alogue.ui.theme.CatalogueTheme
 @Composable
 fun CatListScreen(
     modifier: Modifier = Modifier,
-    viewModel: CatListViewModel = viewModel()
+    viewModel: CatListViewModel = viewModel(),
+    onBreedSelected: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -43,7 +45,7 @@ fun CatListScreen(
                 CircularProgressIndicator()
             }
         } else {
-            CatList(breeds = state.breeds)
+            CatList(breeds = state.breeds, onBreedSelected = onBreedSelected)
         }
     }
 }
@@ -51,11 +53,12 @@ fun CatListScreen(
 @Composable
 fun CatList(
     modifier: Modifier = Modifier,
-    breeds: List<Breed>
+    breeds: List<Breed>,
+    onBreedSelected: () -> Unit,
 ) {
     LazyColumn {
         items(breeds) { breed ->
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth().clickable { onBreedSelected() }) {
                 AsyncImage(
                     contentScale = ContentScale.Crop,
                     model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
@@ -90,7 +93,7 @@ private fun CatListPreview() {
                 Breed(name = "Aegean", referenceImageId = "0XYvRd7oD"),
                 Breed(name = "American Bobtail", referenceImageId = "0XYvRd7oD"),
                 Breed(name = "American Curl", referenceImageId = "0XYvRd7oD"),
-            )
-        )
+            ),
+        ) {}
     }
 }
