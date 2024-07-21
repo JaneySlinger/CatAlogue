@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.cat_alogue.model.Breed
 import com.example.cat_alogue.screens.catDetail.CatDetailScreen
 import com.example.cat_alogue.screens.catList.CatListScreen
@@ -38,9 +40,16 @@ class MainActivity : ComponentActivity() {
                             val viewModel = hiltViewModel<CatListViewModel>()
                             CatListScreen(
                                 viewModel = viewModel,
-                                onBreedSelected = { navController.navigate(Route.DETAILS.name) })
+                                onBreedSelected = { breedId ->
+                                    navController.navigate("${Route.DETAILS.name}/$breedId")
+                                })
                         }
-                        composable(Route.DETAILS.name) {
+                        composable(
+                            route = "${Route.DETAILS.name}/{breedId}",
+                            arguments = listOf(navArgument("breedId") {
+                                type = NavType.StringType
+                            })
+                        ) {
                             CatDetailScreen(
                                 breed = Breed(name = "Test")
                             )

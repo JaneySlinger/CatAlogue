@@ -33,7 +33,7 @@ import com.example.cat_alogue.ui.theme.CatalogueTheme
 fun CatListScreen(
     modifier: Modifier = Modifier,
     viewModel: CatListViewModel = viewModel(),
-    onBreedSelected: () -> Unit,
+    onBreedSelected: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -54,30 +54,33 @@ fun CatListScreen(
 fun CatList(
     modifier: Modifier = Modifier,
     breeds: List<Breed>,
-    onBreedSelected: () -> Unit,
+    onBreedSelected: (String) -> Unit,
 ) {
     LazyColumn {
         items(breeds) { breed ->
-            Row(modifier = Modifier.fillMaxWidth().clickable { onBreedSelected() }) {
-                AsyncImage(
-                    contentScale = ContentScale.Crop,
-                    model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(128.dp),
-                    placeholder = painterResource(R.drawable.outline_pets_24),
-                    error = painterResource(R.drawable.baseline_error_outline_24),
-                )
-                breed.name?.let {
+            breed.name?.let {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { breed.id?.let { id -> onBreedSelected(id) } }) {
+                    AsyncImage(
+                        contentScale = ContentScale.Crop,
+                        model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(128.dp),
+                        placeholder = painterResource(R.drawable.outline_pets_24),
+                        error = painterResource(R.drawable.baseline_error_outline_24),
+                    )
                     Text(
                         it,
                         Modifier.padding(8.dp),
                         style = MaterialTheme.typography.titleLarge
                     )
+
                 }
+                HorizontalDivider()
             }
-            HorizontalDivider()
         }
     }
 }
