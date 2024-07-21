@@ -16,28 +16,11 @@ class CatListViewModel @Inject constructor(
 ) : ViewModel() {
     val state = MutableStateFlow(CatListState())
 
-    private fun update(newState: CatListState) {
-        state.value = newState
-    }
-
-    fun handleEvent(event: CatListEvent) {
-        when (event) {
-            is CatListEvent.LoadBreeds -> {
-                loadBreeds()
-            }
-            is CatListEvent.BreedSelected -> {
-                // Handle breed selection
-            }
-        }
-    }
-
-    private fun loadBreeds() {
-        // Load breeds from API or local storage
+    init {
         viewModelScope.launch {
             try {
                 update(
                     state.value.copy(
-                        isLoading = false,
                         breeds = breedRepository.getBreeds()
                     )
                 )
@@ -47,14 +30,13 @@ class CatListViewModel @Inject constructor(
             }
         }
     }
+
+    private fun update(newState: CatListState) {
+        state.value = newState
+    }
 }
 
 data class CatListState(
     val isLoading: Boolean = true,
     val breeds: List<Breed> = emptyList()
 )
-
-sealed class CatListEvent {
-    data object LoadBreeds : CatListEvent()
-    data class BreedSelected(val breedId: String) : CatListEvent()
-}

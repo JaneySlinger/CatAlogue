@@ -3,34 +3,26 @@ package com.example.cat_alogue.screens.catList
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import com.example.cat_alogue.R
 import com.example.cat_alogue.model.Breed
+import com.example.cat_alogue.ui.CatImage
+import com.example.cat_alogue.ui.LoadingScreen
 import com.example.cat_alogue.ui.theme.CatalogueTheme
 import com.example.cat_alogue.ui.theme.PaleBlue
 
@@ -41,14 +33,9 @@ fun CatListScreen(
     onBreedSelected: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
-    LaunchedEffect(Unit) {
-        viewModel.handleEvent(CatListEvent.LoadBreeds)
-    }
     Column(modifier = modifier.fillMaxSize()) {
-        if (state.isLoading) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                CircularProgressIndicator()
-            }
+        if (state.breeds.isEmpty()) {
+            LoadingScreen()
         } else {
             CatList(breeds = state.breeds, onBreedSelected = onBreedSelected)
         }
@@ -61,7 +48,7 @@ fun CatList(
     breeds: List<Breed>,
     onBreedSelected: (String) -> Unit,
 ) {
-    Column {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,18 +61,17 @@ fun CatList(
             )
         }
 
-
         LazyColumn {
             items(breeds) { breed ->
                 breed.name?.let {
                     Row(modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { breed.id?.let { id -> onBreedSelected(id) } }) {
+                        .clickable { breed.id?.let { id -> onBreedSelected(id) } }
+                    ) {
                         CatImage(breed.referenceImageId)
                         Column(modifier = Modifier.padding(8.dp)) {
                             Text(
-                                it,
-                                style = MaterialTheme.typography.headlineMedium
+                                it, style = MaterialTheme.typography.headlineMedium
                             )
                             breed.temperament?.let {
                                 Text(it)
@@ -97,25 +83,6 @@ fun CatList(
             }
         }
     }
-
-}
-
-@Composable
-fun CatImage(
-    referenceImageId: String?,
-    modifier: Modifier = Modifier
-) {
-    AsyncImage(
-        contentScale = ContentScale.Crop,
-        model = "https://cdn2.thecatapi.com/images/${referenceImageId}.jpg",
-        contentDescription = null,
-        modifier = Modifier
-            .padding(8.dp)
-            .size(128.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        placeholder = painterResource(R.drawable.outline_pets_24),
-        error = painterResource(R.drawable.baseline_error_outline_24),
-    )
 }
 
 @Preview

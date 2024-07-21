@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cat_alogue.R
 import com.example.cat_alogue.model.Breed
-import com.example.cat_alogue.screens.catList.CatImage
+import com.example.cat_alogue.ui.CatImage
+import com.example.cat_alogue.ui.LoadingScreen
 import com.example.cat_alogue.ui.theme.Blush
 import com.example.cat_alogue.ui.theme.CatalogueTheme
 import com.example.cat_alogue.ui.theme.DarkGrey
@@ -46,10 +46,11 @@ fun CatDetailScreen(
 ) {
     val state by viewModel.state.collectAsState()
     state.breed?.let {
-        CatDetailContent(breed = state.breed!!)
-    } ?: CircularProgressIndicator()
-
-
+        CatDetailContent(
+            modifier = modifier,
+            breed = state.breed!!
+        )
+    } ?: LoadingScreen()
 }
 
 @Composable
@@ -89,28 +90,14 @@ fun CatDetailContent(
             }
 
             breed.lifeSpan?.let {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Blush),
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "This breed lives about $it years",
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-
+                LifespanCard(it)
             }
 
             breed.temperament?.let {
                 Text(
                     text = "Temperament",
-                    modifier = Modifier.padding(vertical = 4.dp)
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
                         .semantics { heading() },
                     style = MaterialTheme.typography.headlineSmall,
                 )
@@ -118,7 +105,8 @@ fun CatDetailContent(
             }
             Text(
                 text = "Friendly with:",
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
                     .semantics { heading() },
                 style = MaterialTheme.typography.headlineSmall,
             )
@@ -147,6 +135,28 @@ fun CatDetailContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun LifespanCard(
+    lifeSpan: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = Blush),
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = "This breed lives about $lifeSpan years",
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
