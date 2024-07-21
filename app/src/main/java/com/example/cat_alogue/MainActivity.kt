@@ -14,8 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.cat_alogue.model.Breed
 import com.example.cat_alogue.screens.catDetail.CatDetailScreen
+import com.example.cat_alogue.screens.catDetail.CatDetailViewModel
 import com.example.cat_alogue.screens.catList.CatListScreen
 import com.example.cat_alogue.screens.catList.CatListViewModel
 import com.example.cat_alogue.ui.theme.CatalogueTheme
@@ -50,8 +50,9 @@ class MainActivity : ComponentActivity() {
                                 type = NavType.StringType
                             })
                         ) {
+                            val viewModel = hiltViewModel<CatDetailViewModel>()
                             CatDetailScreen(
-                                breed = Breed(name = "Test")
+                                viewModel = viewModel
                             )
                         }
                     }

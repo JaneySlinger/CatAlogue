@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.cat_alogue.R
 import com.example.cat_alogue.model.Breed
@@ -26,12 +30,27 @@ import com.example.cat_alogue.ui.theme.CatalogueTheme
 @Composable
 fun CatDetailScreen(
     modifier: Modifier = Modifier,
-    breed: Breed,
+    viewModel: CatDetailViewModel = viewModel(),
 ) {
-    Column(modifier = modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
-        Column (
+    val state by viewModel.state.collectAsState()
+    state.breed?.let {
+        CatDetailContent(breed = state.breed!!)
+    } ?: CircularProgressIndicator()
+
+
+}
+
+@Composable
+fun CatDetailContent(
+    breed: Breed,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
+        Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -53,7 +72,7 @@ fun CatDetailScreen(
                 )
             }
         }
-        breed.description?.let {Text(it, style = MaterialTheme.typography.bodyLarge)}
+        breed.description?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
 
         breed.temperament?.let {
             Text(
@@ -91,7 +110,6 @@ fun CatDetailScreen(
             )
         }
     }
-
 }
 
 @Composable
@@ -102,11 +120,17 @@ fun RankingRow(
 ) {
     Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = category, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Text(
+                text = category,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
             repeat(5) { index ->
                 Icon(
                     // Todo janey change the color
-                    tint = if(index < ranking) Color.Green else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                    tint = if (index < ranking) Color.Green else MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = 0.38f
+                    ),
                     painter = painterResource(R.drawable.outline_pets_24),
                     contentDescription = null
                 )
@@ -121,7 +145,7 @@ fun RankingRow(
 @Composable
 private fun CatDetailScreenPreview() {
     CatalogueTheme {
-        CatDetailScreen(
+        CatDetailContent(
             breed = Breed(
                 name = "Abyssinian",
                 referenceImageId = "0XYvRd7oD",

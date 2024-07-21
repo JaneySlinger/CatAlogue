@@ -3,15 +3,17 @@ package com.example.cat_alogue.screens.catList
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cat_alogue.data.BreedRepository
 import com.example.cat_alogue.model.Breed
-import com.example.cat_alogue.network.CatApi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CatListViewModel @Inject constructor() : ViewModel() {
+class CatListViewModel @Inject constructor(
+    private val breedRepository: BreedRepository
+) : ViewModel() {
     val state = MutableStateFlow(CatListState())
 
     private fun update(newState: CatListState) {
@@ -36,7 +38,7 @@ class CatListViewModel @Inject constructor() : ViewModel() {
                 update(
                     state.value.copy(
                         isLoading = false,
-                        breeds = CatApi.retrofitService.getBreeds()
+                        breeds = breedRepository.getBreeds()
                     )
                 )
                 Log.d("CAT_ALOGUE", "Breeds loaded: ${state.value.breeds}")
