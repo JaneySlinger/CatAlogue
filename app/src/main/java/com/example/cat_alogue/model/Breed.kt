@@ -3,7 +3,6 @@ package com.example.cat_alogue.model
 import com.squareup.moshi.Json
 
 data class Breed(
-    val adaptability: Int? = null,
     @Json(name = "affection_level")
     val affectionLevel: Int? = null,
     @Json(name = "cat_friendly")
@@ -24,7 +23,6 @@ data class Breed(
     val healthIssues: Int? = null,
     val hypoallergenic: Int? = null,
     val id: String? = null,
-    val indoor: Int? = null,
     val intelligence: Int? = null,
     val lap: Int? = null,
     @Json(name = "life_span")
@@ -46,10 +44,4 @@ data class Breed(
     @Json(name = "vetstreet_url")
     val vetStreetUrl: String? = null,
     val vocalisation: Int? = null,
-    val weight: Weight? = null,
-)
-
-data class Weight(
-    val imperial: String? = null,
-    val metric: String? = null,
 )

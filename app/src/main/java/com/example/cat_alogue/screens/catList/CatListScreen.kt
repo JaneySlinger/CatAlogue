@@ -1,6 +1,8 @@
 package com.example.cat_alogue.screens.catList
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +32,7 @@ import coil.compose.AsyncImage
 import com.example.cat_alogue.R
 import com.example.cat_alogue.model.Breed
 import com.example.cat_alogue.ui.theme.CatalogueTheme
+import com.example.cat_alogue.ui.theme.PaleBlue
 
 @Composable
 fun CatListScreen(
@@ -56,35 +61,62 @@ fun CatList(
     breeds: List<Breed>,
     onBreedSelected: (String) -> Unit,
 ) {
-    LazyColumn {
-        items(breeds) { breed ->
-            breed.name?.let {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { breed.id?.let { id -> onBreedSelected(id) } }) {
-                    AsyncImage(
-                        contentScale = ContentScale.Crop,
-                        model = "https://cdn2.thecatapi.com/images/${breed.referenceImageId}.jpg",
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(128.dp),
-                        placeholder = painterResource(R.drawable.outline_pets_24),
-                        error = painterResource(R.drawable.baseline_error_outline_24),
-                    )
-                    Text(
-                        it,
-                        Modifier.padding(8.dp),
-                        style = MaterialTheme.typography.titleLarge
-                    )
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(PaleBlue),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                "Cat-Alogue",
+                style = MaterialTheme.typography.headlineLarge,
+            )
+        }
 
+
+        LazyColumn {
+            items(breeds) { breed ->
+                breed.name?.let {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { breed.id?.let { id -> onBreedSelected(id) } }) {
+                        CatImage(breed.referenceImageId)
+                        Column(modifier = Modifier.padding(8.dp)) {
+                            Text(
+                                it,
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            breed.temperament?.let {
+                                Text(it)
+                            }
+                        }
+                    }
+                    HorizontalDivider()
                 }
-                HorizontalDivider()
             }
         }
     }
+
 }
 
+@Composable
+fun CatImage(
+    referenceImageId: String?,
+    modifier: Modifier = Modifier
+) {
+    AsyncImage(
+        contentScale = ContentScale.Crop,
+        model = "https://cdn2.thecatapi.com/images/${referenceImageId}.jpg",
+        contentDescription = null,
+        modifier = Modifier
+            .padding(8.dp)
+            .size(128.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        placeholder = painterResource(R.drawable.outline_pets_24),
+        error = painterResource(R.drawable.baseline_error_outline_24),
+    )
+}
 
 @Preview
 @Composable
@@ -92,10 +124,25 @@ private fun CatListPreview() {
     CatalogueTheme {
         CatList(
             breeds = listOf(
-                Breed(name = "Abyssinian", referenceImageId = "0XYvRd7oD"),
-                Breed(name = "Aegean", referenceImageId = "0XYvRd7oD"),
-                Breed(name = "American Bobtail", referenceImageId = "0XYvRd7oD"),
-                Breed(name = "American Curl", referenceImageId = "0XYvRd7oD"),
+                Breed(
+                    name = "Abyssinian",
+                    referenceImageId = "0XYvRd7oD",
+                    temperament = "Active, Energetic, Independent, Intelligent, Gentle",
+                ),
+                Breed(
+                    name = "Aegean", referenceImageId = "0XYvRd7oD",
+                    temperament = "Active, Energetic, Independent, Intelligent, Gentle",
+                ),
+                Breed(
+                    name = "American Bobtail long name",
+                    temperament = "Active, Energetic, Independent, Intelligent, Gentle",
+                    referenceImageId = "0XYvRd7oD"
+                ),
+                Breed(
+                    name = "American Curl",
+                    temperament = "Active, Energetic, Independent, Intelligent, Gentle",
+                    referenceImageId = "0XYvRd7oD"
+                ),
             ),
         ) {}
     }
