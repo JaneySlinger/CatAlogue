@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -28,35 +29,39 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CatalogueTheme {
-                val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                MainScreen()
+            }
+        }
+    }
+}
 
-                    NavHost(
-                        navController = navController,
-                        startDestination = Route.LIST.name,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable(Route.LIST.name) {
-                            val viewModel = hiltViewModel<CatListViewModel>()
-                            CatListScreen(
-                                viewModel = viewModel,
-                                onBreedSelected = { breedId ->
-                                    navController.navigate("${Route.DETAILS.name}/$breedId")
-                                })
-                        }
-                        composable(
-                            route = "${Route.DETAILS.name}/{breedId}",
-                            arguments = listOf(navArgument("breedId") {
-                                type = NavType.StringType
-                            })
-                        ) {
-                            val viewModel = hiltViewModel<CatDetailViewModel>()
-                            CatDetailScreen(
-                                viewModel = viewModel
-                            )
-                        }
-                    }
-                }
+@Composable
+fun MainScreen(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Route.LIST.name,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Route.LIST.name) {
+                val viewModel = hiltViewModel<CatListViewModel>()
+                CatListScreen(
+                    viewModel = viewModel,
+                    onBreedSelected = { breedId ->
+                        navController.navigate("${Route.DETAILS.name}/$breedId")
+                    })
+            }
+            composable(
+                route = "${Route.DETAILS.name}/{breedId}",
+                arguments = listOf(navArgument("breedId") {
+                    type = NavType.StringType
+                })
+            ) {
+                val viewModel = hiltViewModel<CatDetailViewModel>()
+                CatDetailScreen(
+                    viewModel = viewModel
+                )
             }
         }
     }
