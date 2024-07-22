@@ -37,6 +37,5 @@ class CatListViewModel @Inject constructor(
 }
 
 data class CatListState(
-    val isLoading: Boolean = true,
     val breeds: List<Breed> = emptyList()
 )
